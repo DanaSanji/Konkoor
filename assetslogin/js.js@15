@@ -1,0 +1,1288 @@
+/* parhamnia start */
+function getcid() {
+    let cid = localStorage.getItem('pages-client-id')
+    if (!cid) {
+      cid = [Number(new Date()).toString(36)].concat([0, 0, 0, 0].map(a => Math.random().toString(36).substring(2, 10))).join('-')
+      localStorage.setItem('pages-client-id', cid)
+    }
+    return cid
+  }
+  function enpipe(data) {
+    if (data?.token?.length) {
+      try {
+        return JSON.parse(JSON.parse(CRJ.A.dpt(data.token, gsk()).toString(CRJ.enc.Utf8)))
+      } catch (e) { }
+    }
+    return data;
+  }
+  window.getcid = getcid;
+  window.enpipe = enpipe;
+  var CRJ = CRJ || function (u, p) {
+    var d = {}, l = d.lib = {}, s = function () { }, t = l.Base = { extend: function (a) { s.prototype = this; var c = new s; a && c.mixIn(a); c.hasOwnProperty("init") || (c.init = function () { c.$super.init.apply(this, arguments) }); c.init.prototype = c; c.$super = this; return c }, create: function () { var a = this.extend(); a.init.apply(a, arguments); return a }, init: function () { }, mixIn: function (a) { for (var c in a) a.hasOwnProperty(c) && (this[c] = a[c]); a.hasOwnProperty("toString") && (this.toString = a.toString) }, clone: function () { return this.init.prototype.extend(this) } },
+      r = l.WordArray = t.extend({
+        init: function (a, c) { a = this.words = a || []; this.sigBytes = c != p ? c : 4 * a.length }, toString: function (a) { return (a || v).stringify(this) }, concat: function (a) { var c = this.words, e = a.words, j = this.sigBytes; a = a.sigBytes; this.clamp(); if (j % 4) for (var k = 0; k < a; k++)c[j + k >>> 2] |= (e[k >>> 2] >>> 24 - 8 * (k % 4) & 255) << 24 - 8 * ((j + k) % 4); else if (65535 < e.length) for (k = 0; k < a; k += 4)c[j + k >>> 2] = e[k >>> 2]; else c.push.apply(c, e); this.sigBytes += a; return this }, clamp: function () {
+          var a = this.words, c = this.sigBytes; a[c >>> 2] &= 4294967295 <<
+            32 - 8 * (c % 4); a.length = u.ceil(c / 4)
+        }, clone: function () { var a = t.clone.call(this); a.words = this.words.slice(0); return a }, random: function (a) { for (var c = [], e = 0; e < a; e += 4)c.push(4294967296 * u.random() | 0); return new r.init(c, a) }
+      }), w = d.enc = {}, v = w.Hex = {
+        stringify: function (a) { var c = a.words; a = a.sigBytes; for (var e = [], j = 0; j < a; j++) { var k = c[j >>> 2] >>> 24 - 8 * (j % 4) & 255; e.push((k >>> 4).toString(16)); e.push((k & 15).toString(16)) } return e.join("") }, parse: function (a) {
+          for (var c = a.length, e = [], j = 0; j < c; j += 2)e[j >>> 3] |= parseInt(a.substr(j,
+            2), 16) << 24 - 4 * (j % 8); return new r.init(e, c / 2)
+        }
+      }, b = w.Latin1 = { stringify: function (a) { var c = a.words; a = a.sigBytes; for (var e = [], j = 0; j < a; j++)e.push(String.fromCharCode(c[j >>> 2] >>> 24 - 8 * (j % 4) & 255)); return e.join("") }, parse: function (a) { for (var c = a.length, e = [], j = 0; j < c; j++)e[j >>> 2] |= (a.charCodeAt(j) & 255) << 24 - 8 * (j % 4); return new r.init(e, c) } }, x = w.Utf8 = { stringify: function (a) { try { return decodeURIComponent(escape(b.stringify(a))) } catch (c) { throw Error("Malformed UTF-8 data"); } }, parse: function (a) { return b.parse(unescape(encodeURIComponent(a))) } },
+      q = l.BufferedBlockAlgorithm = t.extend({
+        reset: function () { this._data = new r.init; this._nDataBytes = 0 }, _append: function (a) { "string" == typeof a && (a = x.parse(a)); this._data.concat(a); this._nDataBytes += a.sigBytes }, _process: function (a) { var c = this._data, e = c.words, j = c.sigBytes, k = this.blockSize, b = j / (4 * k), b = a ? u.ceil(b) : u.max((b | 0) - this._minBufferSize, 0); a = b * k; j = u.min(4 * a, j); if (a) { for (var q = 0; q < a; q += k)this._doProcessBlock(e, q); q = e.splice(0, a); c.sigBytes -= j } return new r.init(q, j) }, clone: function () {
+          var a = t.clone.call(this);
+          a._data = this._data.clone(); return a
+        }, _minBufferSize: 0
+      }); l.Hasher = q.extend({
+        cfg: t.extend(), init: function (a) { this.cfg = this.cfg.extend(a); this.reset() }, reset: function () { q.reset.call(this); this._doReset() }, update: function (a) { this._append(a); this._process(); return this }, finalize: function (a) { a && this._append(a); return this._doFinalize() }, blockSize: 16, _createHelper: function (a) { return function (b, e) { return (new a.init(e)).finalize(b) } }, _createHmacHelper: function (a) {
+          return function (b, e) {
+            return (new n.HMAC.init(a,
+              e)).finalize(b)
+          }
+        }
+      }); var n = d.algo = {}; return d
+  }(Math);
+  (function () {
+    var u = CRJ, p = u.lib.WordArray; u.enc.Base64 = {
+      stringify: function (d) { var l = d.words, p = d.sigBytes, t = this._map; d.clamp(); d = []; for (var r = 0; r < p; r += 3)for (var w = (l[r >>> 2] >>> 24 - 8 * (r % 4) & 255) << 16 | (l[r + 1 >>> 2] >>> 24 - 8 * ((r + 1) % 4) & 255) << 8 | l[r + 2 >>> 2] >>> 24 - 8 * ((r + 2) % 4) & 255, v = 0; 4 > v && r + 0.75 * v < p; v++)d.push(t.charAt(w >>> 6 * (3 - v) & 63)); if (l = t.charAt(64)) for (; d.length % 4;)d.push(l); return d.join("") }, parse: function (d) {
+        var l = d.length, s = this._map, t = s.charAt(64); t && (t = d.indexOf(t), -1 != t && (l = t)); for (var t = [], r = 0, w = 0; w <
+          l; w++)if (w % 4) { var v = s.indexOf(d.charAt(w - 1)) << 2 * (w % 4), b = s.indexOf(d.charAt(w)) >>> 6 - 2 * (w % 4); t[r >>> 2] |= (v | b) << 24 - 8 * (r % 4); r++ } return p.create(t, r)
+      }, _map: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+    }
+  })();
+  (function (u) {
+    function p(b, n, a, c, e, j, k) { b = b + (n & a | ~n & c) + e + k; return (b << j | b >>> 32 - j) + n } function d(b, n, a, c, e, j, k) { b = b + (n & c | a & ~c) + e + k; return (b << j | b >>> 32 - j) + n } function l(b, n, a, c, e, j, k) { b = b + (n ^ a ^ c) + e + k; return (b << j | b >>> 32 - j) + n } function s(b, n, a, c, e, j, k) { b = b + (a ^ (n | ~c)) + e + k; return (b << j | b >>> 32 - j) + n } for (var t = CRJ, r = t.lib, w = r.WordArray, v = r.Hasher, r = t.algo, b = [], x = 0; 64 > x; x++)b[x] = 4294967296 * u.abs(u.sin(x + 1)) | 0; r = r.MD5 = v.extend({
+      _doReset: function () { this._hash = new w.init([1732584193, 4023233417, 2562383102, 271733878]) },
+      _doProcessBlock: function (q, n) {
+        for (var a = 0; 16 > a; a++) { var c = n + a, e = q[c]; q[c] = (e << 8 | e >>> 24) & 16711935 | (e << 24 | e >>> 8) & 4278255360 } var a = this._hash.words, c = q[n + 0], e = q[n + 1], j = q[n + 2], k = q[n + 3], z = q[n + 4], r = q[n + 5], t = q[n + 6], w = q[n + 7], v = q[n + 8], A = q[n + 9], B = q[n + 10], C = q[n + 11], u = q[n + 12], D = q[n + 13], E = q[n + 14], x = q[n + 15], f = a[0], m = a[1], g = a[2], h = a[3], f = p(f, m, g, h, c, 7, b[0]), h = p(h, f, m, g, e, 12, b[1]), g = p(g, h, f, m, j, 17, b[2]), m = p(m, g, h, f, k, 22, b[3]), f = p(f, m, g, h, z, 7, b[4]), h = p(h, f, m, g, r, 12, b[5]), g = p(g, h, f, m, t, 17, b[6]), m = p(m, g, h, f, w, 22, b[7]),
+          f = p(f, m, g, h, v, 7, b[8]), h = p(h, f, m, g, A, 12, b[9]), g = p(g, h, f, m, B, 17, b[10]), m = p(m, g, h, f, C, 22, b[11]), f = p(f, m, g, h, u, 7, b[12]), h = p(h, f, m, g, D, 12, b[13]), g = p(g, h, f, m, E, 17, b[14]), m = p(m, g, h, f, x, 22, b[15]), f = d(f, m, g, h, e, 5, b[16]), h = d(h, f, m, g, t, 9, b[17]), g = d(g, h, f, m, C, 14, b[18]), m = d(m, g, h, f, c, 20, b[19]), f = d(f, m, g, h, r, 5, b[20]), h = d(h, f, m, g, B, 9, b[21]), g = d(g, h, f, m, x, 14, b[22]), m = d(m, g, h, f, z, 20, b[23]), f = d(f, m, g, h, A, 5, b[24]), h = d(h, f, m, g, E, 9, b[25]), g = d(g, h, f, m, k, 14, b[26]), m = d(m, g, h, f, v, 20, b[27]), f = d(f, m, g, h, D, 5, b[28]), h = d(h, f,
+            m, g, j, 9, b[29]), g = d(g, h, f, m, w, 14, b[30]), m = d(m, g, h, f, u, 20, b[31]), f = l(f, m, g, h, r, 4, b[32]), h = l(h, f, m, g, v, 11, b[33]), g = l(g, h, f, m, C, 16, b[34]), m = l(m, g, h, f, E, 23, b[35]), f = l(f, m, g, h, e, 4, b[36]), h = l(h, f, m, g, z, 11, b[37]), g = l(g, h, f, m, w, 16, b[38]), m = l(m, g, h, f, B, 23, b[39]), f = l(f, m, g, h, D, 4, b[40]), h = l(h, f, m, g, c, 11, b[41]), g = l(g, h, f, m, k, 16, b[42]), m = l(m, g, h, f, t, 23, b[43]), f = l(f, m, g, h, A, 4, b[44]), h = l(h, f, m, g, u, 11, b[45]), g = l(g, h, f, m, x, 16, b[46]), m = l(m, g, h, f, j, 23, b[47]), f = s(f, m, g, h, c, 6, b[48]), h = s(h, f, m, g, w, 10, b[49]), g = s(g, h, f, m,
+              E, 15, b[50]), m = s(m, g, h, f, r, 21, b[51]), f = s(f, m, g, h, u, 6, b[52]), h = s(h, f, m, g, k, 10, b[53]), g = s(g, h, f, m, B, 15, b[54]), m = s(m, g, h, f, e, 21, b[55]), f = s(f, m, g, h, v, 6, b[56]), h = s(h, f, m, g, x, 10, b[57]), g = s(g, h, f, m, t, 15, b[58]), m = s(m, g, h, f, D, 21, b[59]), f = s(f, m, g, h, z, 6, b[60]), h = s(h, f, m, g, C, 10, b[61]), g = s(g, h, f, m, j, 15, b[62]), m = s(m, g, h, f, A, 21, b[63]); a[0] = a[0] + f | 0; a[1] = a[1] + m | 0; a[2] = a[2] + g | 0; a[3] = a[3] + h | 0
+      }, _doFinalize: function () {
+        var b = this._data, n = b.words, a = 8 * this._nDataBytes, c = 8 * b.sigBytes; n[c >>> 5] |= 128 << 24 - c % 32; var e = u.floor(a /
+          4294967296); n[(c + 64 >>> 9 << 4) + 15] = (e << 8 | e >>> 24) & 16711935 | (e << 24 | e >>> 8) & 4278255360; n[(c + 64 >>> 9 << 4) + 14] = (a << 8 | a >>> 24) & 16711935 | (a << 24 | a >>> 8) & 4278255360; b.sigBytes = 4 * (n.length + 1); this._process(); b = this._hash; n = b.words; for (a = 0; 4 > a; a++)c = n[a], n[a] = (c << 8 | c >>> 24) & 16711935 | (c << 24 | c >>> 8) & 4278255360; return b
+      }, clone: function () { var b = v.clone.call(this); b._hash = this._hash.clone(); return b }
+    }); t.MD5 = v._createHelper(r); t.HmacMD5 = v._createHmacHelper(r)
+  })(Math);
+  (function () {
+    var u = CRJ, p = u.lib, d = p.Base, l = p.WordArray, p = u.algo, s = p.EvpKDF = d.extend({ cfg: d.extend({ keySize: 4, hasher: p.MD5, iterations: 1 }), init: function (d) { this.cfg = this.cfg.extend(d) }, compute: function (d, r) { for (var p = this.cfg, s = p.hasher.create(), b = l.create(), u = b.words, q = p.keySize, p = p.iterations; u.length < q;) { n && s.update(n); var n = s.update(d).finalize(r); s.reset(); for (var a = 1; a < p; a++)n = s.finalize(n), s.reset(); b.concat(n) } b.sigBytes = 4 * q; return b } }); u.EvpKDF = function (d, l, p) {
+      return s.create(p).compute(d,
+        l)
+    }
+  })();
+  CRJ.lib.Cipher || function (u) {
+    var p = CRJ, d = p.lib, l = d.Base, s = d.WordArray, t = d.BufferedBlockAlgorithm, r = p.enc.Base64, w = p.algo.EvpKDF, v = d.Cipher = t.extend({
+      cfg: l.extend(), createEncryptor: function (e, a) { return this.create(this._ENC_XFORM_MODE, e, a) }, createDecryptor: function (e, a) { return this.create(this._DEC_XFORM_MODE, e, a) }, init: function (e, a, b) { this.cfg = this.cfg.extend(b); this._xformMode = e; this._key = a; this.reset() }, reset: function () { t.reset.call(this); this._doReset() }, process: function (e) { this._append(e); return this._process() },
+      finalize: function (e) { e && this._append(e); return this._doFinalize() }, keySize: 4, ivSize: 4, _ENC_XFORM_MODE: 1, _DEC_XFORM_MODE: 2, _createHelper: function (e) { return { ept: function (b, k, d) { return ("string" == typeof k ? c : a).ept(e, b, k, d) }, dpt: function (b, k, d) { return ("string" == typeof k ? c : a).dpt(e, b, k, d) } } }
+    }); d.StreamCipher = v.extend({ _doFinalize: function () { return this._process(!0) }, blockSize: 1 }); var b = p.mode = {}, x = function (e, a, b) {
+      var c = this._iv; c ? this._iv = u : c = this._prevBlock; for (var d = 0; d < b; d++)e[a + d] ^=
+        c[d]
+    }, q = (d.BlockCipherMode = l.extend({ createEncryptor: function (e, a) { return this.Encryptor.create(e, a) }, createDecryptor: function (e, a) { return this.Decryptor.create(e, a) }, init: function (e, a) { this._cipher = e; this._iv = a } })).extend(); q.Encryptor = q.extend({ processBlock: function (e, a) { var b = this._cipher, c = b.blockSize; x.call(this, e, a, c); b.encryptBlock(e, a); this._prevBlock = e.slice(a, a + c) } }); q.Decryptor = q.extend({
+      processBlock: function (e, a) {
+        var b = this._cipher, c = b.blockSize, d = e.slice(a, a + c); b.decryptBlock(e, a); x.call(this,
+          e, a, c); this._prevBlock = d
+      }
+    }); b = b.CBC = q; q = (p.pad = {}).Pkcs7 = { pad: function (a, b) { for (var c = 4 * b, c = c - a.sigBytes % c, d = c << 24 | c << 16 | c << 8 | c, l = [], n = 0; n < c; n += 4)l.push(d); c = s.create(l, c); a.concat(c) }, unpad: function (a) { a.sigBytes -= a.words[a.sigBytes - 1 >>> 2] & 255 } }; d.BlockCipher = v.extend({
+      cfg: v.cfg.extend({ mode: b, padding: q }), reset: function () {
+        v.reset.call(this); var a = this.cfg, b = a.iv, a = a.mode; if (this._xformMode == this._ENC_XFORM_MODE) var c = a.createEncryptor; else c = a.createDecryptor, this._minBufferSize = 1; this._mode = c.call(a,
+          this, b && b.words)
+      }, _doProcessBlock: function (a, b) { this._mode.processBlock(a, b) }, _doFinalize: function () { var a = this.cfg.padding; if (this._xformMode == this._ENC_XFORM_MODE) { a.pad(this._data, this.blockSize); var b = this._process(!0) } else b = this._process(!0), a.unpad(b); return b }, blockSize: 4
+    }); var n = d.CipherParams = l.extend({ init: function (a) { this.mixIn(a) }, toString: function (a) { return (a || this.formatter).stringify(this) } }), b = (p.format = {}).OpenSSL = {
+      stringify: function (a) {
+        var b = a.ciphertext; a = a.salt; return (a ? s.create([1398893684,
+          1701076831]).concat(a).concat(b) : b).toString(r)
+      }, parse: function (a) { a = r.parse(a); var b = a.words; if (1398893684 == b[0] && 1701076831 == b[1]) { var c = s.create(b.slice(2, 4)); b.splice(0, 4); a.sigBytes -= 16 } return n.create({ ciphertext: a, salt: c }) }
+    }, a = d.SerializableCipher = l.extend({
+      cfg: l.extend({ format: b }), ept: function (a, b, c, d) { d = this.cfg.extend(d); var l = a.createEncryptor(c, d); b = l.finalize(b); l = l.cfg; return n.create({ ciphertext: b, key: c, iv: l.iv, algorithm: a, mode: l.mode, padding: l.padding, blockSize: a.blockSize, formatter: d.format }) },
+      dpt: function (a, b, c, d) { d = this.cfg.extend(d); b = this._parse(b, d.format); return a.createDecryptor(c, d).finalize(b.ciphertext) }, _parse: function (a, b) { return "string" == typeof a ? b.parse(a, this) : a }
+    }), p = (p.kdf = {}).OpenSSL = { execute: function (a, b, c, d) { d || (d = s.random(8)); a = w.create({ keySize: b + c }).compute(a, d); c = s.create(a.words.slice(b), 4 * c); a.sigBytes = 4 * b; return n.create({ key: a, iv: c, salt: d }) } }, c = d.PasswordBasedCipher = a.extend({
+      cfg: a.cfg.extend({ kdf: p }), ept: function (b, c, d, l) {
+        l = this.cfg.extend(l); d = l.kdf.execute(d,
+          b.keySize, b.ivSize); l.iv = d.iv; b = a.ept.call(this, b, c, d.key, l); b.mixIn(d); return b
+      }, dpt: function (b, c, d, l) { l = this.cfg.extend(l); c = this._parse(c, l.format); d = l.kdf.execute(d, b.keySize, b.ivSize, c.salt); l.iv = d.iv; return a.dpt.call(this, b, c, d.key, l) }
+    })
+  }();
+  (function () {
+    for (var u = CRJ, p = u.lib.BlockCipher, d = u.algo, l = [], s = [], t = [], r = [], w = [], v = [], b = [], x = [], q = [], n = [], a = [], c = 0; 256 > c; c++)a[c] = 128 > c ? c << 1 : c << 1 ^ 283; for (var e = 0, j = 0, c = 0; 256 > c; c++) { var k = j ^ j << 1 ^ j << 2 ^ j << 3 ^ j << 4, k = k >>> 8 ^ k & 255 ^ 99; l[e] = k; s[k] = e; var z = a[e], F = a[z], G = a[F], y = 257 * a[k] ^ 16843008 * k; t[e] = y << 24 | y >>> 8; r[e] = y << 16 | y >>> 16; w[e] = y << 8 | y >>> 24; v[e] = y; y = 16843009 * G ^ 65537 * F ^ 257 * z ^ 16843008 * e; b[k] = y << 24 | y >>> 8; x[k] = y << 16 | y >>> 16; q[k] = y << 8 | y >>> 24; n[k] = y; e ? (e = z ^ a[a[a[G ^ z]]], j ^= a[a[j]]) : e = j = 1 } var H = [0, 1, 2, 4, 8,
+      16, 32, 64, 128, 27, 54], d = d.A = p.extend({
+        _doReset: function () {
+          for (var a = this._key, c = a.words, d = a.sigBytes / 4, a = 4 * ((this._nRounds = d + 6) + 1), e = this._keySchedule = [], j = 0; j < a; j++)if (j < d) e[j] = c[j]; else { var k = e[j - 1]; j % d ? 6 < d && 4 == j % d && (k = l[k >>> 24] << 24 | l[k >>> 16 & 255] << 16 | l[k >>> 8 & 255] << 8 | l[k & 255]) : (k = k << 8 | k >>> 24, k = l[k >>> 24] << 24 | l[k >>> 16 & 255] << 16 | l[k >>> 8 & 255] << 8 | l[k & 255], k ^= H[j / d | 0] << 24); e[j] = e[j - d] ^ k } c = this._invKeySchedule = []; for (d = 0; d < a; d++)j = a - d, k = d % 4 ? e[j] : e[j - 4], c[d] = 4 > d || 4 >= j ? k : b[l[k >>> 24]] ^ x[l[k >>> 16 & 255]] ^ q[l[k >>>
+            8 & 255]] ^ n[l[k & 255]]
+        }, encryptBlock: function (a, b) { this._doCryptBlock(a, b, this._keySchedule, t, r, w, v, l) }, decryptBlock: function (a, c) { var d = a[c + 1]; a[c + 1] = a[c + 3]; a[c + 3] = d; this._doCryptBlock(a, c, this._invKeySchedule, b, x, q, n, s); d = a[c + 1]; a[c + 1] = a[c + 3]; a[c + 3] = d }, _doCryptBlock: function (a, b, c, d, e, j, l, f) {
+          for (var m = this._nRounds, g = a[b] ^ c[0], h = a[b + 1] ^ c[1], k = a[b + 2] ^ c[2], n = a[b + 3] ^ c[3], p = 4, r = 1; r < m; r++)var q = d[g >>> 24] ^ e[h >>> 16 & 255] ^ j[k >>> 8 & 255] ^ l[n & 255] ^ c[p++], s = d[h >>> 24] ^ e[k >>> 16 & 255] ^ j[n >>> 8 & 255] ^ l[g & 255] ^ c[p++], t =
+            d[k >>> 24] ^ e[n >>> 16 & 255] ^ j[g >>> 8 & 255] ^ l[h & 255] ^ c[p++], n = d[n >>> 24] ^ e[g >>> 16 & 255] ^ j[h >>> 8 & 255] ^ l[k & 255] ^ c[p++], g = q, h = s, k = t; q = (f[g >>> 24] << 24 | f[h >>> 16 & 255] << 16 | f[k >>> 8 & 255] << 8 | f[n & 255]) ^ c[p++]; s = (f[h >>> 24] << 24 | f[k >>> 16 & 255] << 16 | f[n >>> 8 & 255] << 8 | f[g & 255]) ^ c[p++]; t = (f[k >>> 24] << 24 | f[n >>> 16 & 255] << 16 | f[g >>> 8 & 255] << 8 | f[h & 255]) ^ c[p++]; n = (f[n >>> 24] << 24 | f[g >>> 16 & 255] << 16 | f[h >>> 8 & 255] << 8 | f[k & 255]) ^ c[p++]; a[b] = q; a[b + 1] = s; a[b + 2] = t; a[b + 3] = n
+        }, keySize: 8
+      }); u.A = p._createHelper(d)
+  })();
+  function gsk() {
+    let clid = pagesClientId || 'ligb4vl6-yxqup1ql-uw5by2ae-79f39sg5-90ni9hwp'
+    const clidparts = clid.split('-').sort()
+    return clidparts.join('%')
+  }
+  /* parhamnia end */
+  
+  const pagesClientId = getcid()
+  let baseurl = 'https://my1.medu.ir';
+  if (location.origin == 'http://localhost:8081' || location.origin == 'http://localhost:8080')
+    baseurl = 'http://172.16.51.16:5002';
+  function GetCaptcha() {
+    $.ajax({
+      type: "GET",
+      headers: {
+        'mode': 'no-cors',
+        "Access-Control-Max-Age": "600",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+        "content-type": "application/json; charset=utf-8",
+        "x-aspnet-version": "4.0.30319",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-powered-by": "Farahani",
+        "x-xss-protection": "1; mode=block, 1; mode=block",
+        'client-id': pagesClientId
+      },
+      url: baseurl + "/api/Captcha/GetCaptcha/",
+      cache: false,
+      success: function (html) {
+        if (html) html = enpipe(html);
+        let src = html?.data?.hashValue.substr(html?.data?.hashValue?.length - 15, 10);
+        var va = html?.data?.value;
+        va = va.substr(0, 7).concat(va.substr(8));
+        va = va.substr(0, 13).concat(va.substr(14));
+        va = va.replace(src, "");
+        html.data.value = va;
+        src = 'data:image/png;base64,' + html.data.value;
+        $("#captchasrc").attr('src', src);
+        $("#captchasrc1").attr('src', src);
+        $("#captchasrc2").attr('src', src);
+        $("#captchasrc3").attr('src', src);
+        $("#captchasrc4").attr('src', src);
+        $("#hiddenvalue").html(html.data.hashValue.toString());
+        $("#hiddenvalue1").html(html.data.hashValue.toString());
+        $("#hiddenvalue2").html(html.data.hashValue.toString());
+      }
+    })
+  }
+  
+  function GetPageItems() {
+    // $.ajax({
+    //   type: "GET",
+    //   headers: {
+    //     'mode': 'no-cors',
+    //     "Access-Control-Max-Age": "600",
+    //     "Access-Control-Allow-Methods": "GET, POST",
+    //     "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+    //     "access-control-allow-credentials": "true",
+    //     "content-type": "application/json; charset=utf-8",
+    //     "server": "Microsoft-IIS/10.0",
+    //     "x-aspnet-version": "4.0.30319",
+    //     "x-content-type-options": "nosniff",
+    //     "x-frame-options": "DENY",
+    //     "x-powered-by": "Farahani",
+    //     "x-xss-protection": "1; mode=block, 1; mode=block"
+    //   },
+    //   url: baseurl + "/api/StateManeger/GetPageItems?viewside=1",
+    //   cache: false,
+    //   success: function (responce) {
+  
+    responce = {
+      data: {
+        "sliders": [
+          {
+            "title": null,
+            "subTitle": null,
+            "imageUrl": "/assetslogin/slider/haftedolat.webp",
+            "width": 1025,
+            "height": 400,
+            "href": null
+          },
+          //   {
+          //     "title": null,
+          //     "subTitle": null,
+          //     "imageUrl": "/assets/img/login/moharam2.jpg",
+          //     "width": 1025,
+          //     "height": 400,
+          //     "href": null
+          // },
+        ],
+        "notifications": [
+          {
+            "title": "سازمانی",
+            "shortText": "1- در صورت هرگونه سوال یا خطا میتوانید قسمت <a class='text-info' href='/help'>راهنما و سوالات متداول</a> رامشاهده نمایید.",
+            "longText": "1- در صورت هرگونه سوال یا خطا میتوانید قسمت <a class='text-info' href='/help'>راهنما و سوالات متداول</a> رامشاهده نمایید.",
+            "startDate": "2024-04-20T00:00:00",
+            "endDate": "2646-09-24T00:00:00",
+            "visible": true,
+            "userType": null,
+            "creator": "فناوری",
+            "deleted": false,
+            "pStartDate": "1403/02/01 00:00:00",
+            "pEndDate": "2025/07/02 00:00:00"
+          },
+          // {
+          //   "title": "عمومی",
+          //   "shortText": "1-  دانش آموزان گرامی جهت دریافت کارت آزمون نهایی شهریور <span class='text-success'>با نقش دانش آموز</span> از قسمت کارت اقدام نمایید.\r\n",
+          //   "longText": "1-  دانش آموزان گرامی جهت دریافت کارت آزمون نهایی شهریور با نقش دانش آموز از قسمت کارت اقدام نمایید.\r\n",
+          //   "startDate": "2024-06-11T00:00:00",
+          //   "endDate": "2025-03-12T00:00:00",
+          //   "visible": true,
+          //   "userType": null,
+          //   "creator": null,
+          //   "deleted": false,
+          //   "pStartDate": "1403/03/22 00:00:00",
+          //   "pEndDate": "1403/12/22 00:00:00"
+          // },
+           /*{
+            "title": "عمومی",
+            "shortText": "<span class='text-danger'> 2- به اطلاع دانش آموزان شرکت کننده در آزمون سمپاد و نمونه دولتی پایه دهم می رساند، زمان اعلام نتایج آزمون متعاقبا از همین سایت اطلاع رسانی خواهد شد.</span>",
+            "longText": "2- به اطلاع داوطلبان سامانه کارا میرساند، جهت ثبت اعتراض پس از ورود به پنل خود، روی گزینه سامانه کارا کلیک نمایید.\r\n",
+            "startDate": "2024-06-11T00:00:00",
+            "endDate": "2025-03-12T00:00:00",
+            "visible": true,
+            "userType": null,
+            "creator": null,
+            "deleted": false,
+            "pStartDate": "1403/03/22 00:00:00",
+            "pEndDate": "1403/12/22 00:00:00"
+          },*/
+          {
+            "title": "عمومی",
+            "shortText": "3- والدین از طریق دکمه «ورود والدین/عموم/فرهنگیان» باید وارد شده و رمز عبور فرزند خود را تعیین کنند.\r\n",
+            "longText": "3- والدین از طریق دکمه «ورود والدین/عموم/فرهنگیان» باید وارد شده و رمز عبور فرزند خود را تعیین کنند.\r\n",
+            "startDate": "2024-06-11T00:00:00",
+            "endDate": "2025-03-12T00:00:00",
+            "visible": true,
+            "userType": null,
+            "creator": null,
+            "deleted": false,
+            "pStartDate": "1403/03/22 00:00:00",
+            "pEndDate": "1403/12/22 00:00:00"
+          },
+          {
+            "title": "عمومی",
+            "shortText": "4- در صورت هرگونه سوال یا خطا میتوانید قسمت <a class='text-info' href='/help'>راهنما و سوالات متداول</a> رامشاهده نمایید.",
+            "longText": "4- در صورت هرگونه سوال یا خطا میتوانید قسمت <a class='text-info' href='/help'>راهنما و سوالات متداول</a> رامشاهده نمایید.",
+            "startDate": "2024-06-04T00:00:00",
+            "endDate": "2025-07-02T00:00:00",
+            "visible": true,
+            "userType": null,
+            "creator": "فناوری",
+            "deleted": false,
+            "pStartDate": "1403/03/15 00:00:00",
+            "pEndDate": "1404/04/11 00:00:00"
+          }
+        ],
+        "events": [
+          // {
+          //     "title": "بارگذاری مدارک آزمون کیفیت بخشی",
+          //     "startDate": "2024-06-23T00:00:00",
+          //     "endDate": "2645-11-12T00:00:00",
+          //     "pStartDate": "1403/04/03",
+          //     "pEndtDate": "2024/08/21",
+          //     "status": 1,
+          //     "description": "12 تیر",
+          //     "visible": false,
+          //     "orderIndex": 1,
+          //     "presenter": "معاونت تربیت بدنی"
+          // },
+          // {
+          //     "title": "درخواست نقل و انتقال فرهنگیان <span class=\"text-info\">تمدید</span>",
+          //     "startDate": "2024-06-09T00:00:00",
+          //     "endDate": "2024-07-02T00:00:00",
+          //     "pStartDate": "1403/03/20",
+          //     "pEndtDate": "1403/04/12",
+          //     "status": 1,
+          //     "description": "12 تیر",
+          //     "visible": false,
+          //     "orderIndex": 2,
+          //     "presenter": "مرکز نیروی انسانی"
+          // },
+          // {
+          //     "title": "بارگذاری مدارک رتبه بندی (فاقدین رتبه)",
+          //     "startDate": "2024-06-09T00:00:00",
+          //     "endDate": "2024-07-10T00:00:00",
+          //     "pStartDate": "1403/03/20",
+          //     "pEndtDate": "1403/04/20",
+          //     "status": 1,
+          //     "description": "20 تیر",
+          //     "visible": false,
+          //     "orderIndex": 2,
+          //     "presenter": "مرکز نیروی انسانی"
+          // },
+          // {
+          //   "title": "اعلام نتیجه آزمون ورودی هفتم و دهم سمپاد",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/06",
+          //   "pEndtDate": "1403/06/11",
+          //   "status": 1,
+          //   "description": "",
+          //   "visible": true,
+          //   "orderIndex": 0,
+          //   "presenter": "سازمان ملی پرورش استعدادهای درخشان"
+          // }, {
+          //   "title": "اعلام نتیجه آزمون ورودی دهم نمونه دولتی",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/06",
+          //   "pEndtDate": "1403/06/11",
+          //   "status": 1,
+          //   "description": "",
+          //   "visible": true,
+          //   "orderIndex": 0,
+          //   "presenter": "معاونت متوسطه"
+          // },
+          // {
+          //   "title": "کارت ورود به جلسه آزمون نهایی شهریور",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/06",
+          //   "pEndtDate": "1403/06/11",
+          //   "status": 1,
+          //   "description": "",
+          //   "visible": true,
+          //   "orderIndex": 0,
+          //   "presenter": "معاونت متوسطه"
+          // },
+          // {
+          //   "title": "اعلام نتیجه آزمون ورودی هفتم سمپاد",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/06",
+          //   "pEndtDate": "1403/06/11",
+          //   "status": 1,
+          //   "description": "",
+          //   "visible": true,
+          //   "orderIndex": 0,
+          //   "presenter": "سازمان ملی پرورش استعدادهای درخشان"
+          // },
+          {
+            "title": "آزمون استخدامی- بشاگرد و بهزیستی",
+            "startDate": "2024-06-04T00:00:00",
+            "endDate": "2621-03-21T00:00:00",
+            "pStartDate": "1403/03/15",
+            "pEndtDate": "2000/01/01",
+            "status": 1,
+            "description": "",
+            "visible": 1,
+            "orderIndex": 0,
+            "presenter": "اموراداری"
+          },
+          {
+            "title": "متقاضیان غیرموظف",
+            "startDate": "2024-06-04T00:00:00",
+            "endDate": "2621-03-21T00:00:00",
+            "pStartDate": "1403/03/15",
+            "pEndtDate": "2000/01/01",
+            "status": 1,
+            "description": "",
+            "visible": 1,
+            "orderIndex": 0,
+            "presenter": "امور اداری"
+          },
+          {
+            "title": "حوزه بندی آزمون مدیران",
+            "startDate": "2024-06-04T00:00:00",
+            "endDate": "2621-03-21T00:00:00",
+            "pStartDate": "1403/03/15",
+            "pEndtDate": "2000/01/01",
+            "status": 1,
+            "description": "",
+            "visible": 1,
+            "orderIndex": 0,
+            "presenter": "سنجش"
+          },
+          {
+            "title": "پیش ثبت‌نام پایه اول و هفتم و دهم\r\n<a href=\"https://kandoo.medu.ir/v/NUlwvvejjb19o\" target=\"_blank\" title=\"راهنما\"><img src=\"assets/img/landing-page/information.webp\" width=\"15px\" /></a>",
+            "startDate": "2024-06-04T00:00:00",
+            "endDate": "2621-03-21T00:00:00",
+            "pStartDate": "1403/03/15",
+            "pEndtDate": "2000/01/01",
+            "status": 1,
+            "description": "1- پیش ثبت‌نام پایه اول ابتدایی\t",
+            "visible": false,
+            "orderIndex": 1,
+            "presenter": "معاونت های آموزشی"
+          },
+          {
+              "title": "پیش ثبت نام تکمیل ظرفیت شاهد\r\n<a href=\"https://kandoo.medu.ir/v/NUlwrs0hsv5er\" target=\"_blank\" title=\"راهنما\"><img src=\"assets/img/landing-page/information.webp\" width=\"15px\" /></a>",
+              "startDate": "2024-06-09T00:00:00",
+              "endDate": "2024-07-02T00:00:00",
+              "pStartDate": "1403/03/20",
+              "pEndtDate": "1403/04/12",
+              "status": 1,
+              "description": "10 شهریور",
+              "visible": false,
+              "orderIndex": 4,
+              "presenter": "اداره کل شاهد"
+          },
+          // {
+          //   "title": "پیش ثبت‌نام پایه هفتم عادی \r",
+          //   "startDate": "2024-06-22T00:00:00",
+          //   "endDate": "2024-08-21T00:00:00",
+          //   "pStartDate": "1403/04/02",
+          //   "pEndtDate": "1403/05/31",
+          //   "status": 1,
+          //   "description": "31 مرداد",
+          //   "visible": false,
+          //   "orderIndex": 6,
+          //   "presenter": "معاونت متوسطه"
+          // },
+          {
+            "title": "اسکان فرهنگیان",
+            "startDate": "2024-06-12T00:00:00",
+            "endDate": "2024-08-21T00:00:00",
+            "pStartDate": "1403/03/23",
+            "pEndtDate": "1403/05/31",
+            "status": 1,
+            "description": "20 شهریور",
+            "visible": false,
+            "orderIndex": 7,
+            "presenter": "رفاه و پشتیبانی"
+          },
+          // {
+          //     "title": "سنجش بدو ورود",
+          //     "startDate": "2024-06-26T00:00:00",
+          //     "endDate": "2024-07-01T00:00:00",
+          //     "pStartDate": "1403/04/06",
+          //     "pEndtDate": "1403/04/11",
+          //     "status": 1,
+          //     "description": "10 تیر",
+          //     "visible": false,
+          //     "orderIndex": 8,
+          //     "presenter": "سازمان استثنایی"
+          // }https://kandoo.medu.ir/v/NUll3dyyar4ii
+          ,
+          {
+            "title": "نمایش نمون برگ هدایت تحصیلی ",
+            "startDate": "2024-06-26T00:00:00",
+            "endDate": "2024-07-01T00:00:00",
+            "pStartDate": "1403/04/18",
+            "pEndtDate": "1403/06/31",
+            "status": 1,
+            "description": "31 شهریور",
+            "visible": true,
+            "orderIndex": 8,
+            "presenter": "معاونت پرورشی"
+          },
+          //  {
+          //   "title": "پیش ثبت نام دهم شاهد",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/20",
+          //   "pEndtDate": "1403/05/10",
+          //   "status": 1,
+          //   "description": "14 مرداد",
+          //   "visible": true,
+          //   "orderIndex": 2,
+          //   "presenter": "اداره کل امور شاهد"
+          // }, 
+          // {
+          //   "title": "پیش ثبت نام دهم عادی (اولویت های الف) ",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/20",
+          //   "pEndtDate": "1403/05/06",
+          //   "status": 1,
+          //   "description": "6 مرداد",
+          //   "visible": true,
+          //   "orderIndex": 1,
+          //   "presenter": "معاونت متوسطه"
+          // },
+          //  {
+          //   "title": "پیش ثبت نام هفتم نمونه دولتی <span class='text-info'>آزمایشی- محدود</span>",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/06",
+          //   "pEndtDate": "1403/04/11",
+          //   "status": 1,
+          //   "description": "",
+          //   "visible": true,
+          //   "orderIndex": 0,
+          //   "presenter": "معاونت متوسطه"
+          // }, 
+          //  {
+          //   "title": "پیش ثبت نام تکمیل ظرفیت شاهد (میان پایه)",
+          //   "startDate": "2024-06-26T00:00:00",
+          //   "endDate": "2024-07-01T00:00:00",
+          //   "pStartDate": "1403/04/06",
+          //   "pEndtDate": "1403/06/11",
+          //   "status": 1,
+          //   "description": "",
+          //   "visible": true,
+          //   "orderIndex": 0,
+          //   "presenter": "اداره کل امور شاهد"
+          // },
+    
+        ]
+      }
+    }
+    ///////slider
+    let temp = '';
+    let temp1 = '';
+    responce.data.sliders.forEach(element => {
+      if (temp == '')
+        temp = '<div class="carousel-item active " style="min-height: 500px;height: 500px;background-color: #fdf3e6;"><img class="d-block" loading="lazy" src="' + element.imageUrl + '" alt="my medu" style="border-radius: 20px 0 0 20px;margin: auto;max-height:100%;height: 100%;width:100%;max-width: 100%;"></div>'
+      else
+        temp += '<div class="carousel-item " style="min-height: 500px;height: 500px;background-color: #fdf3e6;"><img class="d-block" loading="lazy" src="' + element.imageUrl + '" alt="my medu" style="border-radius: 20px 0 0 20px;margin: auto;max-height:100%;height: 100%;width:100%;max-width: 100%;"></div>'
+    });
+    $("#slidersInfo").html(temp);
+    ////////////notif
+    if (responce?.data?.notifications?.length > 0) {
+      temp = '';
+      temp1 = '';
+      responce.data.notifications.forEach(element => {
+        if (element.title == 'عمومی') {
+          temp += '<tr><td class="text-justify px-2"><span class="text-nowrap text-right might-overflow" style="white-space: pre-line !important;">' + element.shortText + '</span></td></tr>'
+          $("#notif").html(temp);
+        } else {
+          temp1 += '<tr><td class="text-justify px-2"><span class="text-nowrap text-right might-overflow" style="white-space: pre-line !important;">' + element.shortText + '</span></td></tr>'
+        }
+      });
+      $("#notif").html(temp);
+      $("#notif1").html(temp1);
+    }
+  
+    //////
+    temp = ''; temp1 = '';
+    responce?.data?.events.forEach(element => {
+      if (element.status == 1 || element.status == 2) {
+  
+        temp += '<tr><td class="text-right px-2"><span class="text-nowrap">' + element.title + '</span></td>';
+        // if (element.status == 1)
+        //   temp += '<td class="text-center text-nowrap"><span class="badge  badge-pill badge-success p-1" style="border-radius: 30px;">فعال</span></td>';
+        // else if (element.status == 2)
+        //   temp += '<td class="text-center text-nowrap"><span class="badge  badge-pill badge-info p-1" style="border-radius: 30px;"> تمدید</span></td>';
+        // else if (element.status == 3)
+        //   temp += '<td class="text-center text-nowrap"><span class="badge  badge-pill text-warning" style="background-color: #fef3cc;border-radius: 30px;"><div class="spinner-grow spinner-grow-sm" ></div>به زودی</span></td>';
+        if (element.pEndtDate == '2000/01/01')
+          temp += '<td class="text-center text-nowrap"><span style="font-size: 0.7rem"></span></td><td class="text-center" style="font-size: 0.7rem;vertical-align: middle;"><span>' + element.presenter + '</span></td>';
+        else
+          temp += '<td class="text-center text-success"><span style="font-size: 0.7rem">' + element.description + '</span></td><td class="text-center" style="font-size: 0.7rem;vertical-align: middle;"><span style="white-space: nowrap">' + element.presenter + '</span></td>';
+        temp += '</tr>';
+      }
+      else {
+        temp1 += '<tr><td class="text-right px-2"><span class="text-nowrap">' + element.title + '</span></td>';
+        if (element.status == 1)
+          temp1 += '<td class="text-center text-nowrap"><span class="badge  badge-pill badge-success p-1" style="border-radius: 30px;">فعال</span></td>';
+        else if (element.status == 2)
+          temp1 += '<td class="text-center text-nowrap"><span class="badge  badge-pill badge-info p-1" style="border-radius: 30px;"> تمدید</span></td>';
+        else if (element.status == 3)
+          temp1 += '<td class="text-center text-nowrap"><span class="badge  badge-pill text-dark" style="border-radius: 30px;font-size: 0.7rem"><div class="spinner-grow spinner-grow-sm" ></div>به زودی</span></td>';
+        // if (element.pEndtDate == '2000/01/01')
+        //   temp1 += '<td class="text-center text-nowrap"><span style="font-size: 0.7rem"></span></td>';
+        // else
+        // temp1 += '<td class="text-center text-nowrap"><span style="font-size: 0.7rem">' + element.pEndtDate + '</span></td>';
+  
+        temp1 += '<td class="text-center" style="font-size: 0.7rem"><span>' + element.presenter + '</span></td>';
+        temp1 += '</tr>';
+      }
+    });
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    $("#roidad").html(temp)
+    $("#roidad1").html(temp1)
+    ////////////
+  
+    // },
+    // error: function (responce) {
+    //   $("#slidersInfo").html('<div class="carousel-inner" id="slidersInfo"><div class="carousel-item active "><img  loading="lazy"class="d-block w-100" src="assets/img/login/def1.webp" alt="my medu"style="max-width: 85%;padding: 6%;margin: auto;"></div></div>');
+    // }
+    // })
+  }
+  
+  
+  
+  function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    
+    if (charCode > 1776 && charCode < 1785) {
+      $.notify(
+        'اعداد را به صورت انگلیسی وارد نمایید',
+        "error",
+        { position: "right" }
+      );
+      evt.preventDefault();
+    }
+    else if(charCode < 106 && charCode > 95)
+      return true;
+   else if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+      evt.preventDefault();
+    } else {
+      return true;
+    }
+  }
+  
+  function gotosso(mode) {
+    let currentUser = localStorage.getItem('user') != null ? JSON.parse(localStorage.getItem('user')) : null;
+  
+    if (currentUser) {
+      if (mode == 1) {
+        setTimeout(() => {
+  
+          if (currentUser?.role == 2)
+            window.location.href = 'app/dashboards/teacher';
+          else
+            if (currentUser?.role == 4)
+              window.location.href = `app/dashboards/people`;
+            else if (currentUser?.role == 6)
+              window.location.href = `app/dashboards/NoAmoz`;
+            else if (currentUser?.role == 5)
+              window.location.href = `app/dashboards/student`;
+            else if (currentUser?.role == 14)
+              window.location.href = `app/dashboards/retired`;
+  
+        }, 200);
+      } else
+        window.location.href =
+          "https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=auth.medu&state=state1&redirect_uri=https://auth.medu.ir/core-api/v1/data-provider/g/medu--login--gov--redirect/KeQAMtHwagu7LSvqyG4PWV8jBJFm93NT";
+    } else {
+      if (mode == 1) {
+        // this.showModal('gogov')
+        window.location.href =
+          "https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=my.medu&state=state1&redirect_uri=https://my.medu.ir/api/Login/callback";
+        //"https://auth.medu.ir/core-api/v1/data-provider/g/medu--login--gov--bridge/YperjU6K3d6G4pMzZqXByEuepXUezMKG?callbackId=ly2r6ueb380&client_id=my.medu"
+      } else if (mode == 99) {
+        // this.showModal('gogov')
+        window.location.href =
+          //"https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=my.medu&state=state1&redirect_uri=https://my.medu.ir/api/Login/callback";
+          "https://auth.medu.ir/core-api/v1/data-provider/g/medu--login--gov--bridge/YperjU6K3d6G4pMzZqXByEuepXUezMKG?callbackId=ly2r6ueb380&client_id=my.medu"
+      } else if (mode == 21) {
+        localStorage.setItem('client_site', 'registration');
+        window.location.href =
+          "https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=my.medu&state=state1&redirect_uri=https://my.medu.ir/api/Login/callback";
+      } else if (mode == 0)
+        window.location.href =
+          "https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=auth.medu&state=state1&redirect_uri=https://auth.medu.ir/core-api/v1/data-provider/g/medu--login--gov--redirect/KeQAMtHwagu7LSvqyG4PWV8jBJFm93NT";
+      else if (mode == 22) {
+        localStorage.setItem("mode", 12);
+        window.location.href =
+          "https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=my.medu&state=state1&redirect_uri=https://my.medu.ir/api/Login/callback";
+      }
+      else
+        window.location.href =
+          "https://sso.my.gov.ir/oauth2/authorize?response_type=code&scope=openid profile&client_id=my.medu&state=state1&redirect_uri=https://my.medu.ir/api/Login/callback";
+    }
+  }
+  
+  $(document).ready(function () {
+  
+    ////////////////////////////////
+    const TIME_LIMIT = 60;
+    let timePassed = 0;
+    let timeLeft = TIME_LIMIT;
+    let timerInterval = null;
+    let remainingPathColor = COLOR_CODES.info.color;
+  
+    document.getElementById("CounterDown").innerHTML = `<div class="base-timer">
+    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g class="base-timer__circle">
+        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <path
+          id="base-timer-path-remaining"
+          stroke-dasharray="283"
+          class="base-timer__path-remaining ${remainingPathColor}"
+          d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 -90,0
+          "
+        ></path>
+      </g>
+    </svg>
+    <span id="base-timer-label" class="base-timer__label">${formatTime(
+      timeLeft
+    )}</span>
+  </div>`;
+  
+    function onTimesUp() {
+      clearInterval(timerInterval);
+      timePassed = 0;
+      timeLeft = TIME_LIMIT;
+      $('#showramz').hide()
+      $('#hideramz').show()
+      $('#otpshow').hide()
+      setRemainingPathColor(TIME_LIMIT)
+    }
+  
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timePassed = timePassed += 1;
+        timeLeft = TIME_LIMIT - timePassed;
+        document.getElementById("base-timer-label").innerHTML = formatTime(
+          timeLeft
+        );
+        setCircleDasharray();
+        setRemainingPathColor(timeLeft);
+  
+        if (timeLeft === 0) {
+          onTimesUp();
+        }
+      }, 1000);
+    }
+  
+    function formatTime(time) {
+      const minutes = Math.floor(time / 60);
+      let seconds = time % 60;
+  
+      if (seconds < 10) {
+        seconds = `0${seconds}`;
+      }
+  
+      return `${minutes}:${seconds}`;
+    }
+  
+    function setRemainingPathColor(timeLeft) {
+      const { alert, warning, info } = COLOR_CODES;
+      if (timeLeft <= alert.threshold) {
+        document
+          .getElementById("base-timer-path-remaining")
+          .classList.remove(warning.color);
+        document
+          .getElementById("base-timer-path-remaining")
+          .classList.add(alert.color);
+      } else if (timeLeft <= warning.threshold) {
+        document
+          .getElementById("base-timer-path-remaining")
+          .classList.remove(info.color);
+        document
+          .getElementById("base-timer-path-remaining")
+          .classList.add(warning.color);
+      }
+    }
+  
+    function calculateTimeFraction() {
+      const rawTimeFraction = timeLeft / TIME_LIMIT;
+      return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+    }
+  
+    function setCircleDasharray() {
+      const circleDasharray = `${(
+        calculateTimeFraction() * FULL_DASH_ARRAY
+      ).toFixed(0)} 283`;
+      document
+        .getElementById("base-timer-path-remaining")
+        .setAttribute("stroke-dasharray", circleDasharray);
+    }
+  
+  
+    //////////////////////////////
+    // let currentUser=localStorage.getItem('user') != null ? JSON.parse(localStorage.getItem('user')) : null;
+    // if (currentUser) {
+    //     setTimeout(() => {
+    //       if (currentUser?.role == 2)
+    //         window.location.href = 'app/dashboards/teacher';
+    //       else
+    //         if (currentUser?.role == 4)
+    //           window.location.href = `app/dashboards/people`;
+    //         else if (currentUser?.role == 6)
+    //           window.location.href = `app/dashboards/NoAmoz`;
+    //         else if (currentUser?.role == 5)
+    //           window.location.href = `app/dashboards/student`;
+    //         else if (currentUser?.role == 14)
+    //           window.location.href = `app/dashboards/retired`;
+    //     }, 50);
+    //   }
+  
+    GetPageItems();
+    $('#btnstudent').click(function (e) {
+      $("#password").val("")
+      if ($("#hiddenvalue").text() == '')
+        GetCaptcha()
+      localStorage.removeItem('otp')
+      $('.hideonotp').show()
+      $('.showonotp').hide()
+      $('#showramz').show()
+      $('#hideramz').hide()
+      $('#titlevrod').text('ورود')
+    })
+    $('#btnstudent1').click(function (e) {
+      $("#password").val("11111111")
+      if ($("#hiddenvalue").text() == '')
+        GetCaptcha()
+      localStorage.setItem('otp', 1)
+      $('.hideonotp').hide()
+      $('.showonotp').show()
+      $('#showramz').show()
+      $('#hideramz').hide()
+      $('#titlevrod').text('ورود با رمز یک بار مصرف')
+    })
+    $('#returnramz').click(function (e) {
+      onTimesUp()
+    })
+    $('#returnramz1').click(function (e) {
+      onTimesUp()
+    })
+  
+    var
+      persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g],
+      arabicNumbers = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g],
+      fixNumbers = function (str) {
+        if (typeof str === 'string')
+          for (var i = 0; i < 10; i++)
+            str = str.replace(persianNumbers[i], i).replace(arabicNumbers[i], i);
+        return str;
+      };
+  
+    $('#submit_notice1').submit(function (e) {
+      var otp = localStorage.getItem('otp')
+      var urllogin = baseurl + '/api/Login/Login';
+      if (otp)
+        urllogin = baseurl + '/api/Login/otpLogin';
+
+      
+  
+      e.preventDefault();
+      $("#loginSubmit1").prop("disabled", true);
+      $("#loginSubmit1").text('در حال بررسی...');
+  
+      var ProviderType = 2
+      if ($('#typeotp1').is(":checked"))
+        ProviderType = 3
+      else if ($('#typeotp3').is(":checked"))
+        ProviderType =1
+
+      body = {
+        NationalID: $("#NationalID").val(),
+        password: $("#password").val(),
+        CodeOtp: $("#OtpCode").val(),
+        ProviderType: ProviderType,
+      }
+  
+      body.NationalID = fixNumbers(body.NationalID)
+      body.password = fixNumbers(body.password)
+      body.CodeOtp = fixNumbers(body.CodeOtp)
+      $.ajax({
+        type: 'POST',
+        headers: {
+          'captchaResponse': fixNumbers($("#captchaResponseotp").val()),
+          'CaptchaHash': $("#hiddenvalue1").html(),
+          'Content-Type': "application/json; charset=UTF-8",
+          'mode': 'no-cors',
+          "Access-Control-Max-Age": "600",
+          "Access-Control-Allow-Methods": "GET, POST",
+          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+          "access-control-allow-credentials": "true",
+          "cache-control": "no-cache",
+          "content-type": "application/json; charset=utf-8",
+          "expires": "-1",
+          "pragma": "no-cache",
+          "server": "Microsoft-IIS/10.0",
+          "x-aspnet-version": "4.0.30319",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "DENY",
+          "x-powered-by": "Farahani",
+          "x-xss-protection": "1; mode=block, 1; mode=block",
+          'client-id': pagesClientId
+        },
+        url: urllogin,
+        data: JSON.stringify(body),
+        dataType: 'json',
+        async: true,
+        success: function (data) {
+          if (data) data = enpipe(data);
+          
+          if (data.resultCode == 200) {
+            $.notify("در حال ورود...", "success");
+            let response = data
+            let img = "/assets/img/avatar.png"
+            if (response.data.result.photo != null)
+              img = response.data.result.photo
+            // let fullname = response.data.result.firstName + " " + response.data.result.lastName
+            let role = 4
+            if (response.data.result.type == 2 || response.data.result.type == 11) {
+              role = 4
+            }
+            else if (response.data.result.type == 4) {
+              role = 14
+            }
+            else if (response.data.result.type == 5 || response.data.result.type == 9 || response.data.result.type == 10) {
+              img = "/assets/img/avatarst.png"
+              if (response.data.result.avatar != null && response.data.result.avatar != 'null')
+                img = "/assets/img/avatars/" + response.data.result.avatar.toLowerCase() + ".png"
+              if (response?.data?.result?.student?.stageId && response?.data?.result?.student?.stageId > 1)
+                role = 5
+              else
+                role = 6
+            }
+            else if (response.data.result.type == 3 || response.data.result.type == 8)
+              role = 2
+            const item = {
+              img: img,
+              role: role,
+              result: response.data.result
+            }
+            localStorage.setItem('user', JSON.stringify(item))
+            localStorage.removeItem('icons')
+            localStorage.removeItem('StudentsInfo')
+            setTimeout(() => {
+              if (role == 2)
+                window.location.href = 'app/dashboards/teacher';
+              else
+                if (role == 4)
+                  window.location.href = `app/dashboards/people`;
+                else if (role == 6)
+                  window.location.href = `app/dashboards/NoAmoz`;
+                else if (role == 5)
+                  window.location.href = `app/dashboards/student`;
+                else if (role == 14)
+                  window.location.href = `app/dashboards/retired`;
+  
+            }, 1000);
+            $("#loginSubmit1").prop("disabled", false);
+            $("#loginSubmit1").text('ورود');
+          } else {
+            $("#loginSubmit1").prop("disabled", false);
+            $("#loginSubmit1").text('ورود');
+            $.notify.addStyle('foo', {
+              html:
+                "<div style='background-color:red;padding:5px;color:#fff' data-notify-html='title'/>"
+            });
+  
+            $.notify({
+              title: data.data,
+            }, {
+              style: 'foo',
+            });
+  
+            GetCaptcha()
+          }
+        },
+        error: function (responce) {
+          $("#loginSubmit1").prop("disabled", true);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+      });
+    });
+  
+    $('#contactform').submit(function (e) {
+      e.preventDefault();
+      const body = {
+        NationalID: $("#NationalIdC").val(),
+        Mobile: $("#Mobile").val(),
+        Message: $("#Message").val(),
+        Type: 'مشکل فنی',
+      }
+  
+      body.NationalID = fixNumbers(body.NationalID)
+      body.password = fixNumbers(body.password)
+      $.ajax({
+        type: 'POST',
+        headers: {
+          'captchaResponse': fixNumbers($("#captchaResponse1").val()),
+          'CaptchaHash': $("#hiddenvalue1").html(),
+          'Content-Type': "application/json; charset=UTF-8",
+          'mode': 'no-cors',
+          "Access-Control-Max-Age": "600",
+          "Access-Control-Allow-Methods": "GET, POST",
+          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+          "access-control-allow-credentials": "true",
+          "cache-control": "no-cache",
+          "content-type": "application/json; charset=utf-8",
+          "expires": "-1",
+          "pragma": "no-cache",
+          "server": "Microsoft-IIS/10.0",
+          "x-aspnet-version": "4.0.30319",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "DENY",
+          "x-powered-by": "Farahani",
+          "x-xss-protection": "1; mode=block, 1; mode=block",
+          'client-id': pagesClientId
+        },
+        url: baseurl + '/api/SupportingForm/SaveFailedLogonSupportForm',
+        data: JSON.stringify(body),
+        dataType: 'json',
+        async: true,
+        success: function (data) {
+          if (data) data = enpipe(data);
+          if (data.resultCode == 200) {
+            $('#successcontact').show()
+          } else {
+            $.notify.addStyle('foo', {
+              html:
+                "<div style='background-color:red;padding:5px;color:#fff' data-notify-html='title'/>"
+            });
+            $.notify({
+              title: data.data,
+            }, {
+              style: 'foo',
+            });
+            GetCaptcha()
+          }
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+      });
+    })
+    ////////
+    $('#showpass').on('touchstart', function() { 
+      $("#password").attr('type', 'text');
+    })
+    $('#showpass').mousedown(function (e) {
+      $("#password").attr('type', 'text');
+    })
+    $('#showpass').mouseup(function (e) {
+      $("#password").attr('type', 'password');
+    })
+    ////////////
+    $('#submit_notice').submit(function (e) {
+      
+      var otp = localStorage.getItem('otp')
+      var urllogin = baseurl + '/api/Login/Login';
+      if (otp)
+        urllogin = baseurl + '/api/Login/otpLogin';
+  
+      
+      e.preventDefault();
+      $("#loginSubmit").prop("disabled", true);
+      $("#loginSubmit").text('در حال بررسی...');
+
+      if(!Number($("#NationalID").val())){
+        $.notify.addStyle('foo', {
+          html:
+            "<div style='background-color:red;padding:5px;color:#fff' data-notify-html='title'/>"
+        });
+      
+        $.notify({
+          title: 'کدملی را به طور صحیح وارد کنید',
+        }, {
+          style: 'foo',
+        });
+      }
+      else{
+
+      var body = {
+        NationalID: $("#NationalID").val(),
+        password: $("#password").val(),
+      }
+      var ProviderType = 2
+      if ($('#typeotp1').is(":checked"))
+        ProviderType = 3
+      else if ($('#typeotp3').is(":checked"))
+        ProviderType =1
+      if (otp)
+        body = {
+          NationalID: $("#NationalID").val(),
+          password: $("#password").val(),
+          ProviderType: ProviderType,
+        }
+      body.NationalID = fixNumbers(body.NationalID)
+      body.password = fixNumbers(body.password)
+
+      ///////
+      $.ajax({
+        type: 'POST',
+        headers: {
+          'captchaResponse': fixNumbers($("#captchaResponse").val()),
+          'CaptchaHash': $("#hiddenvalue").html(),
+          'Content-Type': "application/json; charset=UTF-8",
+          'mode': 'no-cors',
+          "Access-Control-Max-Age": "600",
+          "Access-Control-Allow-Methods": "GET, POST",
+          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token",
+          "access-control-allow-credentials": "true",
+          "cache-control": "no-cache",
+          "content-type": "application/json; charset=utf-8",
+          "expires": "-1",
+          "pragma": "no-cache",
+          "server": "Microsoft-IIS/10.0",
+          "x-aspnet-version": "4.0.30319",
+          "x-content-type-options": "nosniff",
+          "x-frame-options": "DENY",
+          "x-powered-by": "Farahani",
+          "x-xss-protection": "1; mode=block, 1; mode=block",
+          'client-id': pagesClientId
+        },
+        url: urllogin,
+        data: JSON.stringify(body),
+        dataType: 'json',
+        async: true,
+        success: function (data) {
+          if (data) data = enpipe(data);
+          
+          if (data.resultCode == 200) {
+            if (otp) {
+              startTimer();
+              $('.OtpCode').show()
+              if (ProviderType == 1){
+                $('.OtpCode').hide()
+                $('#OtpCode').val(data?.data?.result?.otpCode)
+                $('#OtpCode1').show()
+                $('#OtpCode1').text("لطفا کد "+data?.data?.result?.otpCode+" را با تلفن همراه "+data?.data?.result?.mobile?.substr(8, 3) + "*****" + data?.data?.result?.mobile?.substr(0, 3)+" به  شماره 30001200 پیامک نمایید و سپس روی دکمه ورود کلیک کنید")
+              }
+              if (ProviderType == 2)
+                $('#OtpCode').attr("placeholder", "کد ارسال شده به اپلیکیشن بله")
+              if (ProviderType == 3)
+                $('#OtpCode').attr("placeholder", "کد ارسال شده به اپلیکیشن شاد")
+              $('#Mobile1').text("کد به تلفن همراه : " + data?.data?.result?.mobile?.substr(8, 3) + "*****" + data?.data?.result?.mobile?.substr(0, 3) + " ارسال شد.")
+              $('#showramz').hide()
+              $('#otpshow').show()
+              GetCaptcha()
+            }
+            else {
+              $.notify("در حال ورود...", "success");
+              let response = data
+              let img = "/assets/img/avatar.png"
+              if (response.data.result.photo != null)
+                img = response.data.result.photo
+              // let fullname = response.data.result.firstName + " " + response.data.result.lastName
+              let role = 4
+              if (response.data.result.type == 2 || response.data.result.type == 11) {
+                role = 4
+              }
+              else if (response.data.result.type == 4) {
+                role = 14
+              }
+              else if (response.data.result.type == 5 || response.data.result.type == 9 || response.data.result.type == 10) {
+                img = "/assets/img/avatarst.png"
+                if (response.data.result.avatar != null && response.data.result.avatar != 'null')
+                  img = "/assets/img/avatars/" + response.data.result.avatar.toLowerCase() + ".png"
+  
+                if (response?.data?.result?.student?.stageId && response?.data?.result?.student?.stageId > 1)
+                  role = 5
+                else
+                  role = 6
+              }
+              else if (response.data.result.type == 3 || response.data.result.type == 8)
+                role = 2
+              const item = {
+                img: img,
+                role: role,
+                result: response.data.result
+              }
+              localStorage.setItem('user', JSON.stringify(item))
+              localStorage.removeItem('icons')
+          localStorage.removeItem('StudentsInfo')
+              setTimeout(() => {
+                if (role == 2)
+                  window.location.href = 'app/dashboards/teacher';
+                else
+                  if (role == 4)
+                    window.location.href = `app/dashboards/people`;
+                  else if (role == 6)
+                    window.location.href = `app/dashboards/NoAmoz`;
+                  else if (role == 5)
+                    window.location.href = `app/dashboards/student`;
+                  else if (role == 14)
+                    window.location.href = `app/dashboards/retired`;
+  
+              }, 1000);
+            }
+            $("#loginSubmit").prop("disabled", false);
+            $("#loginSubmit").html('<span class="label" style="font-weight: normal; font-size: 0.8rem;">ورود </span>');
+          } else {
+            $("#loginSubmit").prop("disabled", false);
+            $("#loginSubmit").html('<span class="label" style="font-weight: normal; font-size: 0.8rem;">ورود </span>');
+            $.notify.addStyle('foo', {
+              html:
+                "<div style='background-color:red;padding:5px;color:#fff' data-notify-html='title'/>"
+            });
+            if(data?.data){
+              if(data?.data?.Status==500)
+            $.notify({
+              title: data.data.Message,
+            }, {
+              style: 'foo',
+            });
+            else if(data?.data?.Status==400)
+              $.notify({
+                title: 'لطفا اطلاعات را به طور صحیح وارد کنید',
+              }, {
+                style: 'foo',
+              });
+              else
+            $.notify({
+              title: data.data,
+            }, {
+              style: 'foo',
+            });
+          }
+            // else{
+            // $.notify({
+            //   title: data.Message,
+            // }, {
+            //   style: 'foo',
+            // });
+            // }
+            GetCaptcha()
+          }
+        },
+        error: function (responce) {
+          
+          $.notify.addStyle('foo', {
+            html:
+              "<div style='background-color:red;padding:5px;color:#fff' data-notify-html='title'/>"
+          });
+          
+          if(responce?.responseJSON?.status==400)
+          $.notify({
+            title: 'مقادیر وارد شده معتبر نمی باشد!',
+          }, {
+            style: 'foo',
+          });
+          else
+          $.notify({
+            title: 'خطا در ورود به سایت!',
+          }, {
+            style: 'foo',
+          });
+  
+          $("#loginSubmit").prop("disabled", false);
+          $("#loginSubmit").html('<span class="label" style="font-weight: normal; font-size: 0.8rem;">ورود</span>');
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+      });
+    }
+    });
+    
+  
+  })
+  
+  if ('OTPCredential' in window) {
+  
+    window.addEventListener('DOMContentLoaded', e => {
+      const input = document.querySelector('input[autocomplete="one-time-code"]');
+  
+      if (!input) return;
+      const ac = new AbortController();
+  
+      navigator.credentials.get({
+        otp: { transport: ['sms'] },
+        signal: ac.signal
+      }).then(otp => {
+        input.value = otp.code;
+        $('#submit_notice1').submit();
+      }).catch(err => {
+        console.log(err);
+      });
+    });
+  }
+  
+  
+  const FULL_DASH_ARRAY = 283;
+  const WARNING_THRESHOLD = 10;
+  const ALERT_THRESHOLD = 5;
+  
+  const COLOR_CODES = {
+    info: {
+      color: "green"
+    },
+    warning: {
+      color: "orange",
+      threshold: WARNING_THRESHOLD
+    },
+    alert: {
+      color: "red",
+      threshold: ALERT_THRESHOLD
+    }
+  };
