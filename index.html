@@ -23,7 +23,7 @@
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div data-v-7ba5bd90="" class="h-100">
+  <div data-v-7ba5bd90="" id="home1" class="h-100">
     <div data-v-c5484f30="" data-v-7ba5bd90="" class="homepage">
       <div data-v-c5484f30="" class="landing-page" style="min-height: calc(-55px + 100vh);">
 
@@ -75,12 +75,6 @@
                             <section data-v-50c78e9b="">
                               <div data-v-50c78e9b="" class="row text-center m-auto" style="max-width: 98%;">
                                 <div data-v-50c78e9b="" class="p-0 col col-8"></div>
-                                <div id="returnramz" data-v-50c78e9b="" class="p-0 col col-4" style="cursor: pointer;">
-                                  <div data-v-50c78e9b="" style="text-align: left;"><span data-v-50c78e9b=""
-                                      class="text-nowrap" style="font-size: 0.7rem; color: rgb(9, 107, 133);">
-                                      بازگشت</span> <img data-v-50c78e9b="" loading="lazy"
-                                      src="assets/img/login/return.svg"></div>
-                                </div>
                               </div>
                             </section>
                             <div data-v-50c78e9b="" style="color: rgb(0, 0, 0);" class="mb-2">
@@ -102,107 +96,35 @@
                                 </span>
                               </div>
                             </div>
-
-                            <form class="av-tooltip tooltip-label-bottom" id="submit_notice"
-                              style="max-width: 75%; margin: auto;">
+                            <form class="av-tooltip tooltip-label-bottom" id="submit_notice" style="max-width: 75%; margin: auto;" onsubmit="return validateForm(event)">
                               <div>
                                 <div class="input-group mb-2">
-                                  <!-- <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">کدملی</span>
-                                  </div> -->
-                                  <input type="tel" inputmode="numeric" onkeydown="isNumber(event)" id="NationalID"
-                                    name="NationalID" class="form-control text-right zindex0" placeholder="کدملی/کدیکتا"
-                                    required aria-label="NationalID" maxlength="15" aria-describedby="basic-addon1">
-                                  <svg data-v-2f33cbde="" width="120" height="50" viewBox="0 0 120 50" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="inputuser">
-                                    <path data-v-2f33cbde=""
-                                      d="M0 10C0 4.47715 4.47715 0 10 0H120L89.5674 45.5549C87.712 48.3323 84.5924 50 81.2522 50H10C4.47716 50 0 45.5228 0 40V10Z"
-                                      fill="#F8C74B"></path>
-                                    <path data-v-2f33cbde="" fill-rule="evenodd" clip-rule="evenodd"
-                                      d="M15.5918 15.1956C15.5918 10.634 19.3588 7 23.926 7H25.074C29.6412 7 33.4082 10.634 33.4082 15.1956V16.3194C33.4082 19.2495 31.8539 21.7969 29.5316 23.2443C34.4168 24.7109 38 29.1671 38 34.4867C38 36.4623 36.3746 38 34.449 38H14.551C12.6254 38 11 36.4623 11 34.4867C11 29.1671 14.5832 24.7109 19.4684 23.2443C17.1461 21.7969 15.5918 19.2495 15.5918 16.3194V15.1956ZM23.926 9.90625C20.8853 9.90625 18.4847 12.3097 18.4847 15.1956V16.3194C18.4847 19.2053 20.8853 21.6088 23.926 21.6088H25.074C28.1147 21.6088 30.5153 19.2053 30.5153 16.3194V15.1956C30.5153 12.3097 28.1147 9.90625 25.074 9.90625H23.926ZM22.9694 25.6388C17.921 25.6388 13.8929 29.6354 13.8929 34.4867C13.8929 34.7867 14.1519 35.0938 14.551 35.0938H34.449C34.8481 35.0938 35.1071 34.7867 35.1071 34.4867C35.1071 29.6354 31.079 25.6388 26.0306 25.6388H22.9694Z"
-                                      fill="white"></path>
-                                  </svg>
+                                  <input type="tel" inputmode="numeric" onkeydown="isNumber(event)" id="NationalID" name="NationalID" class="form-control text-right zindex0" placeholder="کدملی/کدیکتا" required aria-label="NationalID" maxlength="15" aria-describedby="basic-addon1">
+                                  <!-- SVG icon here -->
                                 </div>
 
                                 <div class="hideonotp input-group mb-2">
-                                  <!-- <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">رمز عبور</span>
-                                  </div> -->
-                                  <input type="password" required class="hideonotp form-control text-right zindex0" maxlength="20"
-                                    name="password" id="password" placeholder="رمز عبور">
-                                  <svg data-v-2f33cbde="" width="120" height="50" viewBox="0 0 120 50" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" class="inputuser">
-                                    <path data-v-2f33cbde=""
-                                      d="M0 10C0 4.47715 4.47715 0 10 0H120L89.5674 45.5549C87.712 48.3323 84.5924 50 81.2522 50H10C4.47716 50 0 45.5228 0 40V10Z"
-                                      fill="#8B95BC"></path>
-                                    <path data-v-2f33cbde="" fill-rule="evenodd" clip-rule="evenodd"
-                                      d="M19.65 17.8571C19.65 12.9655 23.6155 9 28.5071 9C33.3988 9 37.3643 12.9655 37.3643 17.8571V21.1786H37.6964C39.8365 21.1786 41.5714 22.9135 41.5714 25.0536V36.125C41.5714 38.2651 39.8365 40 37.6964 40H18.875C16.7349 40 15 38.2651 15 36.125V25.0536C15 22.9135 16.7349 21.1786 18.875 21.1786H19.65V17.8571ZM22.9714 21.1786H34.0429V17.8571C34.0429 14.7999 31.5644 12.3214 28.5071 12.3214C25.4499 12.3214 22.9714 14.7999 22.9714 17.8571V21.1786ZM18.875 24.5C18.5693 24.5 18.3214 24.7478 18.3214 25.0536V36.125C18.3214 36.4307 18.5693 36.6786 18.875 36.6786H37.6964C38.0022 36.6786 38.25 36.4307 38.25 36.125V25.0536C38.25 24.7478 38.0022 24.5 37.6964 24.5H18.875Z"
-                                      fill="white"></path>
-                                  </svg>
-
-                                  <div data-v-2f33cbde="" id="showpass" class="inputuser">
-                                    <div data-v-2f33cbde="" class="input-group-text eyeicon"
-                                      style="padding: 15px 0px 0px 15px;"><svg data-v-2f33cbde=""
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        version="1.1" width="256" height="256" viewBox="0 0 256 256"
-                                        xml:space="preserve" class="inputuser">
-                                        <defs data-v-2f33cbde=""></defs>
-                                        <g data-v-2f33cbde=""
-                                          transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"
-                                          style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;">
-                                          <path data-v-2f33cbde=""
-                                            d="M 45 72.864 C 44.999 72.864 45 72.864 45 72.864 c -14.889 0 -29.874 -8.944 -44.538 -26.586 c -0.616 -0.741 -0.616 -1.816 0 -2.557 C 15.126 26.08 30.111 17.135 45 17.135 c 14.889 0 29.874 8.945 44.539 26.586 c 0.616 0.741 0.616 1.816 0 2.557 C 74.874 63.919 59.888 72.864 45 72.864 z M 4.615 45 C 18.128 60.837 31.709 68.864 45 68.864 S 71.872 60.837 85.386 45 C 71.872 29.163 58.29 21.135 45 21.135 S 18.128 29.163 4.615 45 z"
-                                            transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"
-                                            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255, 255, 255); fill-rule: nonzero; opacity: 1;">
-                                          </path>
-                                          <path data-v-2f33cbde=""
-                                            d="M 45 64.103 c -10.533 0 -19.102 -8.569 -19.102 -19.103 c 0 -10.533 8.569 -19.102 19.102 -19.102 c 10.533 0 19.103 8.569 19.103 19.102 C 64.103 55.533 55.533 64.103 45 64.103 z M 45 29.898 c -8.327 0 -15.102 6.775 -15.102 15.102 S 36.673 60.103 45 60.103 S 60.103 53.327 60.103 45 S 53.327 29.898 45 29.898 z"
-                                            transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"
-                                            style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255, 255, 255); fill-rule: nonzero; opacity: 1;">
-                                          </path>
-                                        </g>
-                                      </svg></div>
-                                  </div>
+                                  <input type="password" required class="hideonotp form-control text-right zindex0" maxlength="20" name="password" id="password" placeholder="رمز عبور">
+                                  <!-- SVG icon here -->
                                 </div>
-
-                                <div class="showonotp input-group mb-2"  style="text-align:right;width: 110%;font-size: 0.8rem;display: none;">
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input" disabled value="3" type="radio" name="typeotp" id="typeotp1">
-                                  <label class="form-check-label pr-2" for="typeotp1">
-                                    ارسال به شاد
-                                  </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input"  value="2" type="radio" name="typeotp" id="typeotp2" checked>
-                                  <label class="form-check-label pr-2" for="typeotp2">
-                                    ارسال به بله
-                                  </label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                  <input class="form-check-input"   value="1" type="radio" name="typeotp" id="typeotp3" >
-                                  <label class="form-check-label pr-2" for="typeotp3">
-                                    دریافت پیامک 
-                                  </label>
-                                </div>
-                                <p class="mt-2 m-0"><img src="assets/img/landing-page/information.webp" width="15px" /> شما باید در شبکه اجتماعی انتخابی حساب کاربری داشته باشید.<br/><img src="assets/img/landing-page/information.webp" width="15px" /> 
-                                در صورت نیاز به غیرفعال سازی این سرویس در پنل کاربری خود از قسمت مشخصات، ورود با رمز یک بارمصرف را غیرفعال نمایید.</p>
-                              </div>
                               </div>
 
-                              <p class="hideonotp m-0 " style="font-weight: normal;font-size:0.8rem">رمز عبور سریال شناسنامه نمی باشد
-                              <a onclick='$("#forgotpass").modal("show")' href="javascript:" style="font-weight: normal;font-size:0.8rem" aria-label="حریم خصوصی">فراموشی رمز عبور</a></p>
-                              
-                              <div class="d-flex justify-content-between align-items-center mt-2 mb-3"><button
-                                  id="loginSubmit" type="submit"
-                                  class="btn btn-primary btn-multiple-state btn-shadow m-auto"
-                                  style="width: 70%; background-image: linear-gradient(rgb(94, 204, 219), rgb(89, 194, 208));"> <span class="label"
-                                    style="font-weight: normal; font-size: 0.8rem;">ورود</span></button>
+                              <p class="hideonotp m-0" style="font-weight: normal;font-size:0.8rem">رمز عبور سریال شناسنامه نمی باشد
+                                <a onclick='$("#forgotpass").modal("show")' href="javascript:" style="font-weight: normal;font-size:0.8rem" aria-label="حریم خصوصی">فراموشی رمز عبور</a>
+                              </p>
+
+                              <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
+                                <button id="loginSubmit" type="submit" class="btn btn-primary btn-multiple-state btn-shadow m-auto" style="width: 70%; background-image: linear-gradient(rgb(94, 204, 219), rgb(89, 194, 208));">
+                                  <span class="label" style="font-weight: normal; font-size: 0.8rem;">ورود</span>
+                                </button>
                               </div>
+
                               <fieldset class="form-group mt-2 mb-2" style="font-weight: normal; font-size: 0.8rem;">
                                 <div tabindex="-1" role="group" class="bv-no-focus-ring">
                                   <div class="row">
-                                    <div class="col col-12"><a onclick='$("#Terms").modal("show")' href="javascript:"
-                                        aria-label="حریم خصوصی">مطالعه بیانیه حریم خصوصی</a></div>
+                                    <div class="col col-12">
+                                      <a onclick='$("#Terms").modal("show")' href="javascript:" aria-label="حریم خصوصی">مطالعه بیانیه حریم خصوصی</a>
+                                    </div>
                                   </div>
                                 </div>
                               </fieldset>
@@ -273,127 +195,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="p-0 col-md-8 col-lg-8 col-xl-7 col-xxl-6 col-xs-8 col-10">
-                  <div class="row">
-                    <div class="text-center mb-2 mt-2 col-md-6 col-xs-12 col-12 pr-0 pl-0">
-
-                      <ul class="nav nav-tabs h4notif p-0" id="myTab" role="tablist" data-v-2f33cbde="" style="justify-content: space-evenly;">
-                        <li class="nav-item mr-2">
-                          <button class="btn nav-link active p-1 navinfo" id="home-tab" data-toggle="tab" href="#notifi1"
-                            type="button" role="tab" >
-                            <span class="tilt-shaking" style="position: absolute; right: 10px;border-color: #e9ecef #e9ecef #dee2e6;"><!----> <svg width="28"
-                                height="28" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="17" cy="17" r="16" fill="#FAF3FF" stroke="#C68AF8" stroke-width="2">
-                                </circle>
-                                <path
-                                  d="M20.4534 24C20.4534 25.6569 19.1102 27 17.4534 27C15.7965 27 14.4534 25.6569 14.4534 24M19.2499 11.2386C19.6854 10.7886 19.9534 10.1756 19.9534 9.5C19.9534 8.11929 18.8341 7 17.4534 7C16.0727 7 14.9534 8.11929 14.9534 9.5C14.9534 10.1756 15.2214 10.7886 15.6569 11.2386M8.00019 13.323C7.98585 11.8716 8.76833 10.5163 10.0324 9.80306M26.9066 13.323C26.9209 11.8716 26.1384 10.5163 24.8743 9.80306M23.4534 16.2C23.4534 14.8209 22.8212 13.4982 21.696 12.523C20.5708 11.5479 19.0447 11 17.4534 11C15.8621 11 14.336 11.5479 13.2107 12.523C12.0855 13.4982 11.4534 14.8209 11.4534 16.2C11.4534 18.4818 10.8875 20.1506 10.1814 21.3447C9.37671 22.7056 8.97435 23.3861 8.99024 23.5486C9.00842 23.7346 9.04189 23.7933 9.19271 23.9036C9.32454 24 9.98688 24 11.3116 24H23.5952C24.9199 24 25.5822 24 25.714 23.9036C25.8649 23.7933 25.8983 23.7346 25.9165 23.5486C25.9324 23.3861 25.53 22.7056 24.7253 21.3447C24.0192 20.1506 23.4534 18.4818 23.4534 16.2Z"
-                                  stroke="#7326B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                </path>
-                              </svg></span>
-                              اطلاعیه‌های عمومی
-                          </button>
-                        </li>
-                        <li class="nav-item">
-                          <button class="btn nav-link p-1 navinfo" id="profile-tab" data-toggle="tab" href="#notifi2"
-                            type="button" role="tab">
-                            اطلاعیه‌های سازمانی
-                          </button>
-                        </li>
-                      </ul>
-                      <div class="tab-content">
-                        <div id="notifi1" class="tab-pane fade active show in">
-                          <div class="table-responsive"
-                            style="min-height: 300px;max-height: 300px; width: 100%; background-color: rgb(255, 255, 255); border-radius:0 0 20px 20px; box-shadow: rgb(171, 170, 170) -3px 3px 12px 0px;">
-                            <table role="table" class="table b-table table-hover" id="home1">
-                              <tbody id="notif">
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div id="notifi2" class="tab-pane fade show">
-                          <div class="table-responsive"
-                            style="min-height: 300px;max-height: 300px; width: 100%; background-color: rgb(255, 255, 255); border-radius: 0 0 20px 20px; box-shadow: rgb(171, 170, 170) -3px 3px 12px 0px;">
-                            <table role="table" class="table b-table table-hover" id="menu1">
-                              <tbody id="notif1">
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div class="text-center mb-2 mt-2 col-md-6 col-xs-12 col-12 pr-2 pl-0 roidadclass">
-
-                      <ul class="nav nav-tabs h4notif p-0" id="myTab1" role="tablist" data-v-2f33cbde="" style="justify-content: space-evenly;">
-                        <li class="nav-item">
-                          <button class="btn nav-link active p-1 navinfo" id="home-tab" data-toggle="tab" href="#roidadtab1"
-                            type="button" role="tab" >
-                            <span style="position: absolute; right: 20px;"><svg width="28" height="28"
-                                viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="17" cy="17" r="16" fill="#EEF0FF" stroke="#7A86D8" stroke-width="2">
-                                </circle>
-                                <path
-                                  d="M26 15H8M26 17.5V13.8C26 12.1198 26 11.2798 25.673 10.638C25.3854 10.0735 24.9265 9.6146 24.362 9.32698C23.7202 9 22.8802 9 21.2 9H12.8C11.1198 9 10.2798 9 9.63803 9.32698C9.07354 9.6146 8.6146 10.0735 8.32698 10.638C8 11.2798 8 12.1198 8 13.8V22.2C8 23.8802 8 24.7202 8.32698 25.362C8.6146 25.9265 9.07354 26.3854 9.63803 26.673C10.2798 27 11.1198 27 12.8 27H17M21 7V11M13 7V11M19.5 24L21.5 26L26 21.5"
-                                  stroke="#7A86D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                </path>
-                              </svg></span>
-                            رویدادهای فعال
-                          </button>
-                        </li>
-                        <li class="nav-item">
-                          <button class="btn nav-link p-1 navinfo" id="profile-tab" data-toggle="tab" href="#roidadtab2"
-                            type="button" role="tab">
-                            رویدادهای آتی
-                          </button>
-                        </li>
-                      </ul>
-
-                      <div>
-                        <div class="tab-content">
-                          <div id="roidadtab1" class="tab-pane fade in active show">
-                            <div class="table-responsive"
-                              style="min-height: 300px; width: 100%; box-shadow: rgb(171, 170, 170) -3px 3px 12px 0px; background-color: rgb(255, 255, 255); border-radius: 0px 0px 20px 20px; margin-bottom: 0px;">
-                              <table role="table" class="table b-table table-hover">
-                                <thead class="text-nowrap">
-                                  <tr style="background: #eee;">
-                                    <td class="text-center" style="color: rgb(39, 50, 122);">رویداد
-                                    </td>
-                                    <!-- <td class="text-center" style="color: rgb(39, 50, 122);">وضعیت</td> -->
-                                    <td class="text-center" style="color: rgb(39, 50, 122);">پایان</td>
-                                    <td class="text-center" style="color: rgb(39, 50, 122);">مجری</td>
-                                  </tr>
-                                </thead>
-                                <tbody id="roidad">
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                          <div id="roidadtab2" class="tab-pane fade in ">
-                            <div class="table-responsive"
-                              style="min-height: 300px; width: 100%; box-shadow: rgb(171, 170, 170) -3px 3px 12px 0px; background-color: rgb(255, 255, 255); border-radius: 0px 0px 20px 20px; margin-bottom: 0px;">
-                              <table role="table" class="table b-table table-hover">
-                                <thead class="text-nowrap">
-                                  <tr style="background: #eee;">
-                                    <td class="text-center" style="color: rgb(39, 50, 122);">رویداد</td>
-                                    <!-- <td class="text-center" style="color: rgb(39, 50, 122);">وضعیت</td> -->
-                                    <td class="text-center" style="color: rgb(39, 50, 122);">شروع</td>
-                                    <td class="text-center" style="color: rgb(39, 50, 122);">مجری</td>
-                                  </tr>
-                                </thead>
-                                <tbody id="roidad1">
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div> 
             </div>
           </div>
         </div>
+
       </div>
       <div data-v-11a5be4e="" data-v-c5484f30="" class="fab"><span data-v-11a5be4e="" class="fab-action-button"><svg
             data-v-11a5be4e="" xmlns="http://www.w3.org/2000/svg" height="45" viewBox="0 -960 960 960" width="53"
@@ -646,7 +452,52 @@
       </div>
     </div>
   </div>
+<div id="konkoor" style="display:none;">
+    <img src="https://4khooneh.org/wp-content/uploads/2020/10/6-min.jpg">
+</div>          
+<div id="loading" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+  <div class="spinner"></div>
+</div>
+<style>
+  .spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+  }
 
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>          
+<script>
+function validateForm(event) {
+  event.preventDefault(); // Prevent the form from submitting the traditional way
+
+  var username = document.getElementById("NationalID").value;
+  var password = document.getElementById("password").value;
+
+  if (username === "001" && password === "konkoor") {
+    // Hide the home div
+    document.getElementById("home1").style.display = "none";
+    
+    // Show the loading spinner
+    document.getElementById("loading").style.display = "block";
+    
+    // After 3 seconds, hide the loading spinner and show the konkoor div
+    setTimeout(function() {
+      document.getElementById("loading").style.display = "none"; // Hide loading spinner
+      document.getElementById("konkoor").style.display = "block"; // Show konkoor div
+    }, 3000); // 3000 milliseconds = 3 seconds
+  } else {
+    alert("Invalid username or password");
+  }
+}
+
+</script>
   <div class="notification-container notification-container-empty">
     <div mode="out"></div>
   </div>
